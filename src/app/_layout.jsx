@@ -1,13 +1,16 @@
+import {
+  Fredoka_500Medium,
+  Fredoka_600SemiBold,
+  Fredoka_700Bold,
+  useFonts,
+} from "@expo-google-fonts/fredoka";
 import { Stack } from "expo-router";
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from "expo-router/react-navigation";
-import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "react-native";
-
-SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
   initialRouteName: "index",
@@ -15,6 +18,14 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const [fontsLoaded] = useFonts({
+    Fredoka_500Medium,
+    Fredoka_600SemiBold,
+    Fredoka_700Bold,
+  });
+
+  if (!fontsLoaded) return null;
+
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>

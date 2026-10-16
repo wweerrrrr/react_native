@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { IP_ADDRESS } from "../config";
 
 const backgroundImage = require("../../assets/images/background.png");
 
@@ -19,7 +20,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const [showPassword, setshowPassword] = useState("");
+  const [showPassword, setshowPassword] = useState("false");
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -28,7 +29,7 @@ export default function LoginScreen() {
     }
 
     try {
-      const response = await fetch("http://192.168.68.121:3000/login", {
+      const response = await fetch(`${IP_ADDRESS}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +65,7 @@ export default function LoginScreen() {
           <View style={styles.contentContainer}>
             <Text style={styles.title}>PhastCare</Text>
             <View style={styles.card}>
-              <Text style={styles.Emaillabel}>Username / Email</Text>
+              <Text style={styles.Emaillabel}>Email</Text>
               <TextInput
                 style={styles.EmailInput}
                 placeholder="Enter your email"
@@ -80,7 +81,8 @@ export default function LoginScreen() {
                 style={styles.PasswordInput}
                 placeholder="Enter your password"
                 placeholderTextColor="#94a3b8"
-                secureTextEntry
+                secureTextEntry={!showPassword}
+                autoCapitalize="none"
                 value={password}
                 onChangeText={setPassword}
               />

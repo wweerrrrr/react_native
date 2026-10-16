@@ -10,6 +10,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { IP_ADDRESS } from "../../config";
 
 const backgroundImage = require("../../../assets/images/background.png");
 
@@ -33,7 +34,7 @@ export default function CreateTicketsScreen() {
   const [selectedChannel, setSelectedChannel] = useState("");
 
   useEffect(() => {
-    const API_URL = "http://192.168.68.121:3000";
+    const API_URL = `${IP_ADDRESS}`;
 
     fetch(`${API_URL}/clients`)
       .then((res) => res.json())

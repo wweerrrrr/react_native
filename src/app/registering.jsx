@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { IP_ADDRESS } from "../config";
 
 const backgroundImage = require("../../assets/images/background.png");
 
@@ -23,10 +24,11 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const router = useRouter();
+  const [showPassword, setshowPassword] = useState("false");
 
-  //Function to call your Express backend
+  //Function to call your  backend
   const handleRegister = async () => {
-    if (!email || !password || !confirmPassword) {
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       Alert.alert("Error", "Please fill in all fields.");
       return;
     }
@@ -37,12 +39,18 @@ export default function RegisterScreen() {
     }
 
     try {
-      const response = await fetch("http://192.168.68.121:3000/register", {
+      const response = await fetch(`${IP_ADDRESS}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ firstName, lastName, email, password }),
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+          confirmPassword,
+        }),
       });
 
       const data = await response.json();
@@ -106,8 +114,17 @@ export default function RegisterScreen() {
                 placeholderTextColor="#94a3b8"
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry
+                secureTextEntry={!showPassword}
+                autoCapitalize="none"
               />
+              <TouchableOpacity
+                style={{ alignSelf: "flex-end", marginTop: 5 }}
+                onPress={() => setshowPassword(!showPassword)}
+              >
+                <Text style={{ color: "#492fae" }}>
+                  {showPassword ? "Hide" : "Show"}
+                </Text>
+              </TouchableOpacity>
               <Text style={styles.ConfirmPasswordlabel}>Confirm Password</Text>
               <TextInput
                 style={styles.ConfirmPasswordinput}
@@ -115,7 +132,8 @@ export default function RegisterScreen() {
                 placeholderTextColor="#94a3b8"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                secureTextEntry
+                secureTextEntry={!showPassword}
+                autoCapitalize="none"
               />
               <TouchableOpacity style={styles.Touch} onPress={handleRegister}>
                 <Text style={styles.buttonText}>Register</Text>
@@ -134,7 +152,7 @@ export default function RegisterScreen() {
   );
 }
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
   },
