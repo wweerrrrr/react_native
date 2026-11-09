@@ -7,26 +7,23 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text, TextInput } from "../components/AppText";
 import { IP_ADDRESS } from "../config";
 
 const backgroundImage = require("../../assets/images/background.png");
 
 export default function RegisterScreen() {
-  //State variables to capture typed text
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const [showPassword, setshowPassword] = useState("false");
 
-  //Function to call your  backend
   const handleRegister = async () => {
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
       Alert.alert("Error", "Please fill in all fields.");
@@ -80,70 +77,88 @@ export default function RegisterScreen() {
           <View style={styles.contentContainer}>
             <Text style={styles.title}>PhastCare</Text>
             <View style={styles.card}>
-              <Text style={styles.FirstNamelabel}>First Name</Text>
+              <Text style={styles.cardlabel}>Create your account</Text>
+              <Text style={styles.cardlabel2}>Enter your details</Text>
+
+              <Text style={styles.label}>First Name</Text>
               <TextInput
-                style={styles.FirstNameinput}
-                placeholder="Enter your firstname"
-                placeholderTextColor="#94a3b8"
+                style={styles.input}
+                placeholder="First name"
+                placeholderTextColor="#6b7280"
                 value={firstName}
                 onChangeText={setFirstName}
               />
 
-              <Text style={styles.LastNamelabel}>Last Name</Text>
+              <Text style={styles.label}>Last Name</Text>
               <TextInput
-                style={styles.LastNameinput}
-                placeholder="Enter your lastname"
-                placeholderTextColor="#94a3b8"
+                style={styles.input}
+                placeholder="Last name"
+                placeholderTextColor="#6b7280"
                 value={lastName}
                 onChangeText={setLastName}
               />
-              <Text style={styles.Emaillabel}>Email</Text>
+
+              <Text style={styles.label}>Email</Text>
               <TextInput
-                style={styles.Emailinput}
-                placeholder="Enter your Email"
-                placeholderTextColor="#94a3b8"
-                value={email}
-                onChangeText={setEmail}
+                style={styles.input}
+                placeholder="name@gmail.com"
+                placeholderTextColor="#6b7280"
                 keyboardType="email-address"
                 autoCapitalize="none"
+                value={email}
+                onChangeText={setEmail}
               />
-              <Text style={styles.Passwordlabel}>Password</Text>
-              <TextInput
-                style={styles.Passwordinput}
-                placeholder="Enter your Password"
-                placeholderTextColor="#94a3b8"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-                autoCapitalize="none"
-              />
-              <TouchableOpacity
-                style={{ alignSelf: "flex-end", marginTop: 5 }}
-                onPress={() => setshowPassword(!showPassword)}
-              >
-                <Text style={{ color: "#492fae" }}>
-                  {showPassword ? "Hide" : "Show"}
-                </Text>
-              </TouchableOpacity>
-              <Text style={styles.ConfirmPasswordlabel}>Confirm Password</Text>
-              <TextInput
-                style={styles.ConfirmPasswordinput}
-                placeholder="Confirm your Password"
-                placeholderTextColor="#94a3b8"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry={!showPassword}
-                autoCapitalize="none"
-              />
+
+              <Text style={styles.label}>Password</Text>
+              <View style={styles.passwordWrapper}>
+                <TextInput
+                  style={styles.passwordInput}
+                  placeholder="Password"
+                  placeholderTextColor="#6b7280"
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                  value={password}
+                  onChangeText={setPassword}
+                />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Text style={styles.toggleText}>
+                    {showPassword ? "Hide" : "Show"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.label}>Confirm Password</Text>
+              <View style={styles.passwordWrapper}>
+                <TextInput
+                  style={styles.passwordInput}
+                  placeholder="Confirm password"
+                  placeholderTextColor="#6b7280"
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Text style={styles.toggleText}>
+                    {showPassword ? "Hide" : "Show"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
               <TouchableOpacity style={styles.Touch} onPress={handleRegister}>
                 <Text style={styles.buttonText}>Register</Text>
               </TouchableOpacity>
-              <Text style={styles.loginText}>Already have an account?</Text>
-              <Link href="/" asChild>
-                <TouchableOpacity>
-                  <Text style={styles.link}>Login</Text>
-                </TouchableOpacity>
-              </Link>
+
+              <Text style={styles.footerText}>
+                Already have an account?{" "}
+                <Link href="/" style={styles.link}>
+                  Login
+                </Link>
+              </Text>
             </View>
           </View>
         </ScrollView>
@@ -158,15 +173,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: "#f8f9fe",
     justifyContent: "center",
     alignItems: "center",
   },
   title: {
-    fontSize: 28,
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 20,
     color: "#1e1e2d",
+    marginBottom: 20,
   },
   card: {
     width: "80%",
@@ -176,96 +190,71 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#e2e8f0",
   },
-  FirstNamelabel: {
+  cardlabel: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#1e1e2d",
+    marginBottom: 10,
+  },
+  cardlabel2: {
+    fontSize: 14,
+    color: "#1e1e2d",
+    marginBottom: 10,
+  },
+  label: {
     fontSize: 14,
     fontWeight: "bold",
     color: "#1e1e2d",
-    padding: 10,
+    paddingVertical: 10,
   },
-  FirstNameinput: {
-    backgroundColor: "#edf2f7",
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-    borderRadius: 10,
+  input: {
+    borderWidth: 0.5,
+    borderColor: "#040404",
+    borderRadius: 9,
     padding: 20,
     color: "#1e1e2d",
   },
-  LastNamelabel: {
-    fontSize: 14,
+  passwordWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 0.5,
+    borderColor: "#040404",
+    borderRadius: 9,
+    paddingHorizontal: 16,
+  },
+  passwordInput: {
+    flex: 1,
+    paddingVertical: 20,
+    color: "#1e1e2d",
+  },
+  toggleText: {
+    color: "#710196",
     fontWeight: "bold",
-    color: "#1e1e2d",
-    padding: 10,
-  },
-  LastNameinput: {
-    backgroundColor: "#edf2f7",
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-    borderRadius: 10,
-    padding: 20,
-    color: "#1e1e2d",
-  },
-  Emaillabel: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#1e1e2d",
-    padding: 10,
-  },
-  Emailinput: {
-    backgroundColor: "#edf2f7",
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-    borderRadius: 10,
-    padding: 20,
-    color: "#1e1e2d",
-  },
-  Passwordlabel: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#1e1e2d",
-    padding: 10,
-  },
-  Passwordinput: {
-    backgroundColor: "#edf2f7",
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-    borderRadius: 10,
-    padding: 20,
-    color: "#1e1e2d",
-  },
-  ConfirmPasswordlabel: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#1e1e2d",
-    padding: 10,
-  },
-  ConfirmPasswordinput: {
-    backgroundColor: "#edf2f7",
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-    borderRadius: 10,
-    padding: 20,
-    color: "#1e1e2d",
   },
   Touch: {
-    marginTop: 80,
-    backgroundColor: "#492fae",
+    marginTop: 40,
+    backgroundColor: "#710196",
     paddingVertical: 15,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
   },
-  loginText: {
-    fontSize: 12,
+  buttonText: {
+    fontWeight: "bold",
+    padding: 8,
+    fontSize: 15,
+    color: "#fff",
+  },
+  footerText: {
+    fontSize: 14,
     color: "#020202",
-    padding: 12,
+    marginTop: 10,
   },
   link: {
-    color: "#492fae",
-    fontWeight: "bold",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    color: "#710196",
+    fontFamily: "Sora_600SemiBold",
+    marginLeft: 5,
+    textDecorationLine: "underline",
   },
 });

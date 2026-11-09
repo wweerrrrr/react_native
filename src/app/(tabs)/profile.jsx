@@ -16,12 +16,6 @@ export default function Profile() {
             <Text style={styles.roleText}>Support Staff</Text>
           </View>
         </View>
-
-        <View style={styles.statsRow}>
-          <StatCard value="—" label="Opened" />
-          <StatCard value="—" label="Resolved" />
-          <StatCard value="—" label="Assigned" />
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -64,7 +58,7 @@ const styles = StyleSheet.create({
 
   statsRow: { flexDirection: "row", gap: 10, marginTop: 20 },
   statCard: {
-    flex: 1,
+    flex: 2,
     height: 80,
     padding: 12,
     borderRadius: 14,

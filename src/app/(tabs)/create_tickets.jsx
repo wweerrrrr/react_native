@@ -1,15 +1,16 @@
 import SearchableDropdown from "@/components/SearchableDropdown";
 import { useEffect, useState } from "react";
 import {
+  Alert,
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
+import { Text, TextInput } from "../../components/AppText";
 import { IP_ADDRESS } from "../../config";
 
 const backgroundImage = require("../../../assets/images/background.png");
@@ -61,77 +62,95 @@ export default function CreateTicketsScreen() {
       .then((data) => setProducts(data.options))
       .catch((err) => console.error("Products fetch failed:", err));
   }, []);
+
+  const handleCreateTicket = async () => {
+    if (
+      !customerName ||
+      !customerPhoneNumber ||
+      !selectedClient ||
+      !selectedCategory ||
+      !selectedChannel ||
+      !selectedPriority ||
+      !selectedProduct
+    ) {
+      Alert.alert("Error", "Please enter all fields.");
+      return;
+    }
+
+    // TODO: send the ticket to your backend here
+  };
+
   return (
     <ImageBackground source={backgroundImage} style={{ flex: 1 }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollView}>
+          <View style={styles.contentContainer}>
             <Text style={styles.title}>Create Tickets</Text>
+
             <View style={styles.card}>
-              <View style={styles.row}>
-                <View style={styles.rowItem}>
-                  <Text style={styles.customersNameLabel}>Customer Name:</Text>
-                  <TextInput
-                    style={styles.customersNameInput}
-                    placeholder="Enter customer name"
-                    placeholderTextColor="#010102"
-                    value={customerName}
-                    onChangeText={setCustomerName}
-                  />
-                </View>
-                <View style={styles.rowItem}>
-                  <Text style={styles.customersPhoneNumberLabel}>
-                    Customers Phone:{" "}
-                  </Text>
-                  <TextInput
-                    style={styles.customersPhoneNumberInput}
-                    placeholder="Enter customers phone number"
-                    placeholderTextColor="#f0f1f3"
-                    value={customerPhoneNumber}
-                    onChangeText={setCustomerPhoneNumber}
-                    keyboardType="phone-pad"
-                  />
-                </View>
-              </View>
-              <Text style={styles.customersNameLabel}>Client</Text>
+              <Text style={styles.groupHeading}>Customer Information</Text>
+              <Text style={styles.label}>Customer Name</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Customer name"
+                placeholderTextColor="#6b7280"
+                value={customerName}
+                onChangeText={setCustomerName}
+              />
+
+              <Text style={styles.label}>Customer Phone</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Phone number"
+                placeholderTextColor="#6b7280"
+                value={customerPhoneNumber}
+                onChangeText={setCustomerPhoneNumber}
+                keyboardType="phone-pad"
+              />
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor="#6b7280"
+                keyboardType="email-address"
+              />
+
+              <Text style={styles.label}>Client</Text>
               <SearchableDropdown
                 label="Client"
                 options={clients}
                 selectedValue={selectedClient}
                 onSelect={setSelectedClient}
               />
-              <View style={styles.row}>
-                <View style={styles.rowItem}>
-                  <Text style={styles.customersNameLabel}>Category</Text>
-                  <SearchableDropdown
-                    label="Category"
-                    options={categories}
-                    selectedValue={selectedCategory}
-                    onSelect={setSelectedCategory}
-                  />
-                </View>
-                <View style={styles.rowItem}>
-                  <Text style={styles.customersNameLabel}>Channel</Text>
-                  <SearchableDropdown
-                    label="Channel"
-                    options={channels}
-                    selectedValue={selectedChannel}
-                    onSelect={setSelectedChannel}
-                  />
-                </View>
-              </View>
 
-              <Text style={styles.customersNameLabel}>Priority</Text>
+              <Text style={styles.label}>Category</Text>
+              <SearchableDropdown
+                label="Category"
+                options={categories}
+                selectedValue={selectedCategory}
+                onSelect={setSelectedCategory}
+              />
+
+              <Text style={styles.label}>Channel</Text>
+              <SearchableDropdown
+                label="Channel"
+                options={channels}
+                selectedValue={selectedChannel}
+                onSelect={setSelectedChannel}
+              />
+
+              <Text style={styles.label}>Priority</Text>
               <SearchableDropdown
                 label="Priority"
                 options={priorities}
                 selectedValue={selectedPriority}
                 onSelect={setSelectedPriority}
               />
-              <Text style={styles.customersNameLabel}>Product</Text>
+
+              <Text style={styles.label}>Product</Text>
               <SearchableDropdown
                 label="Product"
                 options={products}
@@ -139,20 +158,12 @@ export default function CreateTicketsScreen() {
                 onSelect={setSelectedProduct}
               />
 
-              {/*  <Picker
-                  selectedValue={selectedClient}
-                  onValueChange={(Value) => setSelectedClient(Value)}
-                >
-                  <Picker.Item label="Select Client" value="" />
-                  <Picker.Item label="3M&C" value="3M&C" />
-                  <Picker.Item label="ADB" value="ADB" />
-                  <Picker.Item label="COY25" value="COY25" />
-                  <Picker.Item label="COY6" value="COY6" />
-                  <Picker.Item
-                    label="KUMASI FOUNDATION"
-                    value="KUMASI FOUNDATION"
-                  />
-                </Picker>  */}
+              <TouchableOpacity
+                style={styles.Touch}
+                onPress={handleCreateTicket}
+              >
+                <Text style={styles.buttonText}>Create Ticket</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -162,65 +173,60 @@ export default function CreateTicketsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  scrollView: {
+    flexGrow: 1,
+  },
+  contentContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingVertical: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 20,
     color: "#1e1e2d",
+    marginBottom: 20,
   },
   card: {
     width: "90%",
-    padding: 10,
+    padding: 16,
     backgroundColor: "#ffffff",
     borderRadius: 20,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "#e2e8f0",
   },
-  customersNameLabel: {
+  label: {
     fontSize: 14,
     fontWeight: "bold",
     color: "#1e1e2d",
-    padding: 10,
+    paddingVertical: 10,
   },
-  customersPhoneNumberLabel: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#1e1e2d",
-    padding: 10,
-  },
-  customersPhoneNumberInput: {
-    backgroundColor: "#ffffff",
-    borderWidth: 2,
-    borderColor: "#e2e8f0",
-    borderRadius: 10,
-    color: "#1e1e2d",
-    paddingHorizontal: 30,
-    paddingVertical: 20,
-    fontSize: 16,
-  },
-  row: {
-    flexDirection: "row",
-    gap: 10,
-  },
-
-  rowItem: {
-    flex: 1,
-    marginRight: 10,
-  },
-  customersNameInput: {
-    backgroundColor: "#edf2f7",
-    borderWidth: 2,
-    borderColor: "#cbd5e1",
-    borderRadius: 5,
+  input: {
+    borderWidth: 0.5,
+    borderColor: "#040404",
+    borderRadius: 9,
     padding: 20,
-    paddingHorizontal: 30,
-    fontSize: 16,
     color: "#1e1e2d",
-    overflow: "hidden",
+  },
+  Touch: {
+    marginTop: 40,
+    backgroundColor: "#710196",
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    fontWeight: "bold",
+    fontSize: 15,
+    color: "#fff",
+  },
+  groupHeading: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#1e1e2d",
+    marginBottom: 10,
+    marginTop: 20,
   },
 });
