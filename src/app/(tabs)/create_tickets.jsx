@@ -34,6 +34,9 @@ export default function CreateTicketsScreen() {
   const [channels, setChannels] = useState([]);
   const [selectedChannel, setSelectedChannel] = useState("");
 
+  const [email, setEmail] = useState("");
+  const [selectedEmail, setSelectedEmail] = useState("");
+
   useEffect(() => {
     const API_URL = `${IP_ADDRESS}`;
 
@@ -88,7 +91,7 @@ export default function CreateTicketsScreen() {
       >
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.contentContainer}>
-            <Text style={styles.title}>Create Tickets</Text>
+            <Text style={styles.title}>Create Ticket</Text>
 
             <View style={styles.card}>
               <Text style={styles.groupHeading}>Customer Information</Text>
@@ -100,23 +103,67 @@ export default function CreateTicketsScreen() {
                 value={customerName}
                 onChangeText={setCustomerName}
               />
-
-              <Text style={styles.label}>Customer Phone</Text>
+              <View style={styles.row}>
+                <View style={styles.rowItem}>
+                  <Text style={styles.label}>Customer Phone</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Phone number"
+                    placeholderTextColor="#6b7280"
+                    value={customerPhoneNumber}
+                    onChangeText={setCustomerPhoneNumber}
+                    keyboardType="phone-pad"
+                  />
+                </View>
+                <View style={styles.rowItem}>
+                  <Text style={styles.label}>Customer Email</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    autoCapitalize="none"
+                    placeholderTextColor="#6b7280"
+                    keyboardType="email-address"
+                    value={email}
+                    value={selectedEmail}
+                    onChangeText={setEmail}
+                    onChangeText={setSelectedEmail}
+                  />
+                </View>
+              </View>
+              <Text style={styles.groupHeading}>Ticket Details</Text>
+              <Text style={styles.label}>Ticket Name</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Phone number"
+                placeholder="Ticket name"
                 placeholderTextColor="#6b7280"
-                value={customerPhoneNumber}
-                onChangeText={setCustomerPhoneNumber}
-                keyboardType="phone-pad"
               />
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#6b7280"
-                keyboardType="email-address"
+              <Text style={styles.label}>Category</Text>
+              <SearchableDropdown
+                label="Category"
+                options={categories}
+                selectedValue={selectedCategory}
+                onSelect={setSelectedCategory}
               />
+              <View style={styles.row}>
+                <View style={styles.rowItem}>
+                  <Text style={styles.label}>Priority</Text>
+                  <SearchableDropdown
+                    label="Priority"
+                    options={priorities}
+                    selectedValue={selectedPriority}
+                    onSelect={setSelectedPriority}
+                  />
+                </View>
+                <View style={styles.rowItem}>
+                  <Text style={styles.label}>Channel</Text>
+                  <SearchableDropdown
+                    label="Channel"
+                    options={channels}
+                    selectedValue={selectedChannel}
+                    onSelect={setSelectedChannel}
+                  />
+                </View>
+              </View>
 
               <Text style={styles.label}>Client</Text>
               <SearchableDropdown
@@ -126,29 +173,7 @@ export default function CreateTicketsScreen() {
                 onSelect={setSelectedClient}
               />
 
-              <Text style={styles.label}>Category</Text>
-              <SearchableDropdown
-                label="Category"
-                options={categories}
-                selectedValue={selectedCategory}
-                onSelect={setSelectedCategory}
-              />
-
-              <Text style={styles.label}>Channel</Text>
-              <SearchableDropdown
-                label="Channel"
-                options={channels}
-                selectedValue={selectedChannel}
-                onSelect={setSelectedChannel}
-              />
-
-              <Text style={styles.label}>Priority</Text>
-              <SearchableDropdown
-                label="Priority"
-                options={priorities}
-                selectedValue={selectedPriority}
-                onSelect={setSelectedPriority}
-              />
+              <Text style={styles.groupHeading}>Product/Vendor</Text>
 
               <Text style={styles.label}>Product</Text>
               <SearchableDropdown
@@ -157,7 +182,12 @@ export default function CreateTicketsScreen() {
                 selectedValue={selectedProduct}
                 onSelect={setSelectedProduct}
               />
-
+              <Text style={styles.label}>Description</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Description of the issue"
+                placeholderTextColor="#6b7280"
+              />
               <TouchableOpacity
                 style={styles.Touch}
                 onPress={handleCreateTicket}
@@ -200,10 +230,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "#1e1e2d",
-    paddingVertical: 10,
+    paddingVertical: 5,
+    marginTop: 10,
   },
   input: {
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: "#040404",
     borderRadius: 9,
     padding: 20,
@@ -226,7 +257,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#1e1e2d",
-    marginBottom: 10,
-    marginTop: 20,
+    // marginBottom: 5,
+    marginTop: 30,
+  },
+  row: {
+    flexDirection: "row",
+    gap: 10,
+    width: "100%",
+  },
+  rowItem: {
+    flex: 1,
   },
 });
